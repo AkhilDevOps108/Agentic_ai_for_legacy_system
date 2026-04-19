@@ -1,0 +1,41 @@
+2026-04-18 02:15:01 INFO  [PaymentService] Starting daily batch payment processing job.
+2026-04-18 02:15:02 INFO  [OrderService] Loading pending orders from queue. Count: 142
+2026-04-18 02:15:03 INFO  [DBConnectionPool] Acquired connection from pool. Active: 8/20
+2026-04-18 02:15:05 INFO  [PaymentService] Processing order ORD-10481. Amount: $249.99
+2026-04-18 02:15:06 INFO  [PaymentGateway] Sending payment request to upstream provider for ORD-10481.
+2026-04-18 02:15:08 INFO  [PaymentGateway] Payment confirmed for ORD-10481. Transaction ID: TXN-88210.
+2026-04-18 02:15:09 INFO  [PaymentService] Processing order ORD-10482. Amount: $89.50
+2026-04-18 02:15:11 WARNING [PaymentGateway] Slow response from upstream provider. Latency: 3200ms for ORD-10482.
+2026-04-18 02:15:14 INFO  [PaymentGateway] Payment confirmed for ORD-10482. Transaction ID: TXN-88211.
+2026-04-18 02:15:15 INFO  [PaymentService] Processing order ORD-10483. Amount: $1,024.00
+2026-04-18 02:15:16 WARNING [DBConnectionPool] Connection pool utilization high. Active: 18/20
+2026-04-18 02:15:18 ERROR [PaymentGateway] Payment request TIMEOUT for ORD-10483 after 5000ms. Upstream provider not responding.
+2026-04-18 02:15:18 INFO  [RetryHandler] Scheduling retry #1 for ORD-10483. Backoff: 2s.
+2026-04-18 02:15:20 ERROR [PaymentGateway] Payment request TIMEOUT for ORD-10483 after 5000ms. Retry #1 failed.
+2026-04-18 02:15:20 INFO  [RetryHandler] Scheduling retry #2 for ORD-10483. Backoff: 4s.
+2026-04-18 02:15:25 ERROR [PaymentGateway] Payment request TIMEOUT for ORD-10483 after 5000ms. Retry #2 failed.
+2026-04-18 02:15:25 ERROR [PaymentService] Order ORD-10483 marked as FAILED after 3 attempts. Reason: PAYMENT_TIMEOUT
+2026-04-18 02:15:26 INFO  [PaymentService] Processing order ORD-10484. Amount: $55.00
+2026-04-18 02:15:27 ERROR [DBConnectionPool] Failed to acquire connection. Pool exhausted. Active: 20/20. Waiters: 5
+2026-04-18 02:15:27 ERROR [DBConnectionPool] java.sql.SQLException: Cannot acquire connection from pool - pool exhausted
+2026-04-18 02:15:28 ERROR [PaymentService] Order ORD-10484 processing failed. Cause: DB_CONNECTION_EXHAUSTED
+2026-04-18 02:15:28 WARNING [HealthCheck] System health degraded. Failed components: [DBConnectionPool, PaymentGateway]
+2026-04-18 02:15:29 INFO  [RetryHandler] Scheduling retry #1 for ORD-10484. Backoff: 2s.
+2026-04-18 02:15:31 ERROR [DBConnectionPool] Failed to acquire connection. Pool exhausted. Active: 20/20. Waiters: 8
+2026-04-18 02:15:31 ERROR [PaymentService] Order ORD-10484 retry #1 failed. Cause: DB_CONNECTION_EXHAUSTED
+2026-04-18 02:15:32 INFO  [PaymentService] Processing order ORD-10485. Amount: $312.75
+2026-04-18 02:15:33 ERROR [PaymentGateway] Payment request TIMEOUT for ORD-10485 after 5000ms. Upstream provider not responding.
+2026-04-18 02:15:33 ERROR [PaymentService] Order ORD-10485 marked as FAILED after 1 attempt. Reason: PAYMENT_TIMEOUT
+2026-04-18 02:15:34 ERROR [DBConnectionPool] CRITICAL: Connection pool completely stalled. No connections returned in 30s.
+2026-04-18 02:15:34 ERROR [AlertManager] ALERT FIRED: payment_processing_failure_rate > 50%. Current: 62.5%
+2026-04-18 02:15:35 WARNING [CircuitBreaker] Circuit breaker OPEN for PaymentGateway. Too many failures in window.
+2026-04-18 02:15:35 INFO  [PaymentService] Halting batch processing. Circuit breaker open.
+2026-04-18 02:15:36 INFO  [PaymentService] Batch summary: Total=142, Processed=87, Succeeded=84, Failed=5, Skipped=55
+2026-04-18 02:15:37 INFO  [RecoveryService] Initiating automatic recovery sequence.
+2026-04-18 02:15:38 INFO  [DBConnectionPool] Force-closing 4 stale connections. Reclaiming pool capacity.
+2026-04-18 02:15:40 INFO  [DBConnectionPool] Pool recovered. Active: 12/20. Available: 8
+2026-04-18 02:15:42 INFO  [HealthCheck] PaymentGateway health check: upstream responding again. Latency: 450ms.
+2026-04-18 02:15:43 INFO  [CircuitBreaker] Circuit breaker HALF-OPEN for PaymentGateway. Allowing probe requests.
+2026-04-18 02:15:45 INFO  [RecoveryService] Recovery complete. 5 failed orders queued for manual retry.
+2026-04-18 02:15:46 WARNING [RecoveryService] Orders pending manual retry: ORD-10483, ORD-10484, ORD-10485, ORD-10490, ORD-10491
+2026-04-18 02:15:47 INFO  [AuditLog] Incident #INC-2026-0418-001 auto-created. Severity: P2. Assigned to: on-call team.
